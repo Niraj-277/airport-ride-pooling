@@ -12,18 +12,18 @@ const cabSchema=new mongoose.Schema({
     },
     capacity:{
         type:Number,
-        default:4 
+        default:8
     },
     //luggage capacity constraint check
     luggageCapacity:{
         type:Number,
-        default:2
+        default:6
     },
     currentLocation:{
         type:{type:String,default:'Point'},
-        coordinates:[number]
+        coordinates:[Number]
     },
-    isAvailabe:{
+    isAvailable:{
         type:Boolean,
         default:true
     }

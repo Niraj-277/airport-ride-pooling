@@ -7,16 +7,16 @@ const rideSchema= new mongoose.Schema({
         required:true
     },
     passengers:[{
-        bookingid:{type:mongoose.Schema.Types.ObjectId , ref:'Booking'},
+        bookingId:{type:mongoose.Schema.Types.ObjectId , ref:'Booking'},
         source:{type:[Number],required:true},
         destination:{type:[Number],required:true}
     }],
-    status:{
-        type:String,
-        enum:['MATCHING','STARTED','COMPLETED'],
-        default:'MATCHING'
+    status: { 
+    type: String, 
+    enum: ['PENDING', 'MATCHED', 'CANCELLED', 'COMPLETED','MATCHING'], 
+    default: 'PENDING' 
     },
-    availabeSeates:{
+    availableSeats:{
         type:Number,
         required:true
     },
@@ -32,6 +32,6 @@ const rideSchema= new mongoose.Schema({
     currentLocation:{
         type:[Number]
     }
-},{timestamps:true,versionKey:true})
+},{timestamps:true})
 
 module.exports=mongoose.model('Ride',rideSchema);

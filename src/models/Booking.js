@@ -8,11 +8,11 @@ const bookingSchema= new mongoose.Schema({
     },
     source:{
         type:{type:String,default:'Point'},
-        coordinates:{type:[number],required:true}
+        coordinates:{type:[Number],required:true}
     },
     destination:{
         type:{type:String,default:'Point'},
-        coordinates:{type:[number],required:true}
+        coordinates:{type:[Number],required:true}
     },
     luggageCount:{
         type:Number,
@@ -21,7 +21,7 @@ const bookingSchema= new mongoose.Schema({
     status:{
         type:String,
         enum:[
-            'PENDING','MATCHD','CANCELLED','COMPLETED'
+            'PENDING','MATCHED','CANCELLED','COMPLETED'
         ],
         default:'PENDING'
     },
