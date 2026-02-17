@@ -1,4 +1,4 @@
-# 🚖 Smart Airport Ride Pooling System
+# Smart Airport Ride Pooling System
 
 A high-performance backend system for grouping passengers into shared cabs, optimizing for route deviation and vehicle capacity. Built for the **Hintro Backend Engineer Assignment**.
 
@@ -54,17 +54,19 @@ The Greedy Matching Strategy
 
 **To satisfy the requirement of handling 10,000 concurrent users, we avoid "Read-Modify-Write" patterns.**
 
-Strategy: Optimistic Concurrency Control via Atomic Operators.
-Instead of checking if (seats > 0) in code, we push the condition to the database query:
+## 🔒 Concurrency Handling
+To satisfy the requirement of handling **10,000 concurrent users**, we avoid "Read-Modify-Write" patterns.
 
-```bash
+**Strategy:** Optimistic Concurrency Control via Atomic Operators.
+Instead of checking `if (seats > 0)` in code, we push the condition to the database query:
+
+```javascript
 await Ride.findOneAndUpdate(
     { _id: rideId, availableSeats: { $gte: 1 } }, // The "Lock"
     { $inc: { availableSeats: -1 }, $push: { passengers: ... } } // The Atomic Update
 );
 
-
- Api EndPoints
+**Api EndPoints**
 Method,Endpoint,Description
 POST,/api/ride/request,Request a ride (Matches existing or creates new)
 POST,/api/ride/update-status,Update ride status (COMPLETED) and free up the cab
