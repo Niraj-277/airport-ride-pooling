@@ -2,28 +2,23 @@
 # Table of Contents
 
 - [Smart Airport Ride Pooling System](#smart-airport-ride-pooling-system)
-    - [Key Features](#--key-features)
+    - [Key Features](#key-features)
     - [🛠️ Tech Stack](#️-tech-stack)
     - [⚙️ Setup & Installation](#️-setup--installation)
-    - [Algorithm & Complexity Analysis](#--algorithm--complexity-analysis)
+    - [Algorithm & Complexity Analysis](#algorithm--complexity-analysis)
         - [The Greedy Matching Strategy](#the-greedy-matching-strategy)
     - [🗄️ Database Schema & Indexing](#️-database-schema--indexing)
-        - [Schema Design](#schema-design)
-        - [Indexing Strategy](#indexing-strategy)
     - [💰 Dynamic Pricing Formula](#-dynamic-pricing-formula)
     - [🔒 Concurrency Handling](#-concurrency-handling)
     - [📡 API Endpoints](#-api-endpoints)
-    - [Low Level Design (LLD)](#--low-level-design-lld)
-        - [Class Diagram](#class-diagram)
-        - [Design Patterns Used](#design-patterns-used)
+    - [Low Level Design (LLD)](#low-level-design-lld)
     - [High Level Architecture (HLD)](#high-level-architecture-hld)
-        - [Architectural Decisions](#architectural-decisions)
 
 # Smart Airport Ride Pooling System
 
 A high-performance backend system for grouping passengers into shared cabs, optimizing for route deviation and vehicle capacity. Built for the **Hintro Backend Engineer Assignment**.
 
-##  Key Features
+## Key Features
 - **Smart Pooling Algorithm:** Groups passengers traveling in similar directions with minimal detour (< 5km).
 - **Geospatial Querying:** Uses MongoDB `$near` and `$geometry` for efficient location-based searching.
 - **Concurrency Safe:** Handles race conditions using Atomic Database Operations (`findOneAndUpdate`), ensuring no seat is double-booked even under high load.
@@ -62,7 +57,7 @@ A high-performance backend system for grouping passengers into shared cabs, opti
     ```bash
     npm start
 
-##  Algorithm & Complexity Analysis
+## Algorithm & Complexity Analysis
 
 ### The Greedy Matching Strategy
 The system uses a **Greedy Approach** to match passengers to existing rides.
@@ -127,7 +122,7 @@ await Ride.findOneAndUpdate(
 
 **[Download Postman Collection](./ride-pooling.postman_collection.json)**
 
-##  Low Level Design (LLD)
+## Low Level Design (LLD)
 
 ### Class Diagram
 The system follows a relational structure where a **Ride** aggregates multiple **Bookings** and is assigned a unique **Cab**.
