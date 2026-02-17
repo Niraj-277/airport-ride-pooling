@@ -104,6 +104,8 @@ await Ride.findOneAndUpdate(
 | `POST` | `/api/ride/update-status` | Update ride status (`COMPLETED`) and free up the cab |
 | `POST` | `/api/ride/cancel` | Cancel a booking and free up the seat |
 
+**[Download Postman Collection](./ride-pooling.postman_collection.json)**
+
 ##  Low Level Design (LLD)
 
 ### Class Diagram

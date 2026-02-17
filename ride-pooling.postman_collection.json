@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "17bd2509-e245-49ba-95e4-dd2e61017f27",
+		"name": "ride-pooling",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Request Ride",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": \"65d4c8f9a1b2c3d4e5f67890\",\n    \"source\": [72.8777, 19.0760],\n    \"destination\": [72.8347, 18.9220],\n    \"luggageCount\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/ride/request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ride",
+						"request"
+					]
+				},
+				"description": "Requests a ride from Mumbai Airport to Gateway of India."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Update Status (Complete Ride)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rideId\": \"REPLACE_WITH_ACTUAL_RIDE_ID\",\n    \"status\": \"COMPLETED\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/ride/update-status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ride",
+						"update-status"
+					]
+				},
+				"description": "Marks a ride as COMPLETED and frees up the cab for new passengers."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Cancel Booking",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookingId\": \"REPLACE_WITH_ACTUAL_BOOKING_ID\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/ride/cancel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ride",
+						"cancel"
+					]
+				},
+				"description": "Cancels a booking and increments the available seat count on the ride."
+			},
+			"response": []
+		}
+	]
+}
