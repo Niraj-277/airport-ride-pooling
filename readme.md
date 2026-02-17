@@ -136,6 +136,14 @@ The system follows a relational structure where a **Ride** aggregates multiple *
 
 ## High Level Architecture (HLD)
 
+### High Level Flow (Diagram)
+
+1. User/Postman requests a ride.
+2. Request hits Node.js + Express app and is routed to the Ride Controller.
+3. Ride Controller queries MongoDB (via Mongoose) for available cabs using geospatial search.
+4. Candidates are filtered by distance & matching logic (Haversine formula).
+5. Best match is selected and booking is confirmed; response is sent back to the user as JSON.
+
 
 The system uses a **Client-Server Architecture** with a stateless backend, designed to scale horizontally behind a load balancer in production environments.
 
