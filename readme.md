@@ -63,7 +63,8 @@ await Ride.findOneAndUpdate(
     { $inc: { availableSeats: -1 }, $push: { passengers: ... } } // The Atomic Update
 );
 
-**Api EndPoints**
+
+ Api EndPoints
 Method,Endpoint,Description
 POST,/api/ride/request,Request a ride (Matches existing or creates new)
 POST,/api/ride/update-status,Update ride status (COMPLETED) and free up the cab
