@@ -136,9 +136,27 @@ The system follows a relational structure where a **Ride** aggregates multiple *
 
 ## High Level Architecture (HLD)
 
+
 The system uses a **Client-Server Architecture** with a stateless backend, designed to scale horizontally behind a load balancer in production environments.
 
 ![High Level Architecture](./assets/ride-pooling-HLD.jpg)
+
+### High Level Flow
+
+1. **User requests ride**
+2. **Request hits Load Balancer**
+3. **Forwarded to Node.js backend instance**
+4. **Backend queries MongoDB for nearby rides**
+5. **Matching algorithm selects best ride**
+6. **Atomic update locks seat**
+7. **Booking confirmed**
+
+### Scaling Strategy
+
+- **Stateless backend:** Enables horizontal scaling (multiple backend instances behind load balancer)
+- **MongoDB indexing:** Fast geospatial search for ride matching
+- **Redis (optional):** Cache hot rides for ultra-fast access
+- **Queue (Kafka/RabbitMQ, optional):** Asynchronous ride matching and decoupled processing for high throughput
 
 ### Architectural Decisions
 * **Layered Pattern:** Separation of concerns into **Routes** (API definition), **Controllers** (Business Logic), and **Models** (Data Access).
