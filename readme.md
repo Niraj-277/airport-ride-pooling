@@ -22,21 +22,26 @@ A high-performance backend system for grouping passengers into shared cabs, opti
    cd airport-ride-pooling
 
 2. **Install Dependencies**
+    ```bash
     npm install
 
 3. **Configure environment**
+    
     Create a .env file in the root directory:
+    ```bash
     MONGO_URI=your_mongodb_connection_string
     PORT=3000
 
 4. **Seed the Database (Dummy Cabs)**
     Initialize the database with dummy cabs around Mumbai airport:
+    ```bash
     node seed.js
 
 5. **Start the Server**
+    ```bash
     npm start
 
-Algorithm & Complexity Analysis
+## Algorithm & Complexity Analysis
 
 The Greedy Matching Strategy
 1. The system uses a Greedy Approach to match passengers to existing rides.
@@ -52,6 +57,7 @@ The Greedy Matching Strategy
 Strategy: Optimistic Concurrency Control via Atomic Operators.
 Instead of checking if (seats > 0) in code, we push the condition to the database query:
 
+```bash
 await Ride.findOneAndUpdate(
     { _id: rideId, availableSeats: { $gte: 1 } }, // The "Lock"
     { $inc: { availableSeats: -1 }, $push: { passengers: ... } } // The Atomic Update
