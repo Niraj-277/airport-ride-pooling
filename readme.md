@@ -2,7 +2,7 @@
 # Table of Contents
 
 - [Smart Airport Ride Pooling System](#smart-airport-ride-pooling-system)
-    - [Key Features](#-key-features)
+    - [Key Features](#--key-features)
     - [🛠️ Tech Stack](#️-tech-stack)
     - [⚙️ Setup & Installation](#️-setup--installation)
     - [Algorithm & Complexity Analysis](#--algorithm--complexity-analysis)
@@ -13,7 +13,7 @@
     - [💰 Dynamic Pricing Formula](#-dynamic-pricing-formula)
     - [🔒 Concurrency Handling](#-concurrency-handling)
     - [📡 API Endpoints](#-api-endpoints)
-    - [Low Level Design (LLD)](#-low-level-design-lld)
+    - [Low Level Design (LLD)](#--low-level-design-lld)
         - [Class Diagram](#class-diagram)
         - [Design Patterns Used](#design-patterns-used)
     - [High Level Architecture (HLD)](#high-level-architecture-hld)
