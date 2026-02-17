@@ -149,15 +149,6 @@ The system uses a **Client-Server Architecture** with a stateless backend, desig
 
 ![High Level Architecture](./assets/ride-pooling-HLD.jpg)
 
-### High Level Flow
-
-1. **User requests ride**
-2. **Request hits Load Balancer**
-3. **Forwarded to Node.js backend instance**
-4. **Backend queries MongoDB for nearby rides**
-5. **Matching algorithm selects best ride**
-6. **Atomic update locks seat**
-7. **Booking confirmed**
 
 ### Scaling Strategy
 
