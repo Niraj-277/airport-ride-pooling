@@ -41,18 +41,47 @@ A high-performance backend system for grouping passengers into shared cabs, opti
     ```bash
     npm start
 
-## Algorithm & Complexity Analysis
+##  Algorithm & Complexity Analysis
 
-The Greedy Matching Strategy
-1. The system uses a Greedy Approach to match passengers to existing rides.
+### The Greedy Matching Strategy
+The system uses a **Greedy Approach** to match passengers to existing rides.
+1.  **Filter ($O(log N)$):** Query MongoDB for rides with `status: MATCHING`, `availableSeats >= 1`, and `luggage` capacity using Geospatial Indexing.
+2.  **Greedy Scan ($O(K)$):** Iterate through the filtered list ($K$ rides).
+3.  **Check Deviation:** For each ride, calculate the distance between the ride's current *last stop* and the new user's *destination*.
+4.  **Select Best Fit:** If the distance is `< 5km`, immediately assign the user.
 
-2. Fetch Active Rides: Retrieve all rides with status MATCHING and availableSeats >= 1.
+**Complexity:**
+- **Time Complexity:** $O(K)$ per request, where $K$ is the number of active, non-full rides in the specific geohash region.
+- **Space Complexity:** $O(1)$ (We only store the current best candidate in memory).
 
-3. Filter by Detour: For each active ride, calculate the distance between the current ride's last stop and the new user's destination.
+## 🗄️ Database Schema & Indexing
 
-4. Select Best Fit: If the distance is < 5km, the user is added to that ride.
+### Schema Design
+* **Cab:** Stores static vehicle info (`licensePlate`, `capacity`) and dynamic status (`isAvailable`, `currentLocation`).
+* **Ride:** Represents a trip in progress. Contains `routeOrder` (array of points) and `passengers` (embedded array for speed).
+* **Booking:** Represents a user's ticket. Links `User` to `Ride`.
 
-**To satisfy the requirement of handling 10,000 concurrent users, we avoid "Read-Modify-Write" patterns.**
+### Indexing Strategy
+We use **Geospatial Indexing** to ensure the query `find({ currentLocation: { $near: ... } })` is lightning fast (under 300ms).
+
+```markdown
+```javascript
+// src/models/Cab.js
+cabSchema.index({ currentLocation: "2dsphere" });
+```
+## 💰 Dynamic Pricing Formula
+
+We implemented a **Distance-Based Pricing** model that calculates fare *before* the ride is booked.
+
+**The Formula:**
+`Total Fare = Base Fare + (Distance_km * Rate_per_km)`
+
+**In Code:**
+```javascript
+const BASE_FARE = 50;
+const RATE_PER_KM = 12;
+const fare = 50 + (distanceInKm * 12);
+```
 
 ## 🔒 Concurrency Handling
 To satisfy the requirement of handling **10,000 concurrent users**, we avoid "Read-Modify-Write" patterns.
@@ -65,9 +94,34 @@ await Ride.findOneAndUpdate(
     { _id: rideId, availableSeats: { $gte: 1 } }, // The "Lock"
     { $inc: { availableSeats: -1 }, $push: { passengers: ... } } // The Atomic Update
 );
+```
 
-**Api EndPoints**
-Method,Endpoint,Description
-POST,/api/ride/request,Request a ride (Matches existing or creates new)
-POST,/api/ride/update-status,Update ride status (COMPLETED) and free up the cab
-POST,/api/ride/cancel,Cancel a booking and free up the seat
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/ride/request` | Request a ride (Matches existing or creates new) |
+| `POST` | `/api/ride/update-status` | Update ride status (`COMPLETED`) and free up the cab |
+| `POST` | `/api/ride/cancel` | Cancel a booking and free up the seat |
+
+##  Low Level Design (LLD)
+
+### Class Diagram
+The system follows a relational structure where a **Ride** aggregates multiple **Bookings** and is assigned a unique **Cab**.
+
+![Class Diagram](./assets/ride-pooling-LLD.png)
+
+### Design Patterns Used
+* **Singleton Pattern:** Database connection (Mongoose) is reused across requests.
+* **Repository Pattern:** Logic is encapsulated in Mongoose Models (`Ride`, `Booking`, `Cab`) rather than raw database queries.
+* **Optimistic Concurrency:** Uses atomic versioning (`$inc`, `$push`) instead of table-level locking.
+
+## High Level Architecture (HLD)
+
+The system uses a **Client-Server Architecture** with a stateless backend, designed to scale horizontally behind a load balancer in production environments.
+
+![High Level Architecture](./assets/ride-pooling-HLD.jpg)
+
+### Architectural Decisions
+* **Layered Pattern:** Separation of concerns into **Routes** (API definition), **Controllers** (Business Logic), and **Models** (Data Access).
+* **Geospatial Offloading:** Complex distance filtering is offloaded to the Database Engine (MongoDB `$near`) rather than processing all records in application memory.
